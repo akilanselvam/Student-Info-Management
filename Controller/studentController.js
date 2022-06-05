@@ -1,95 +1,63 @@
-const fs = require('fs');
-const students = JSON.parse(
-  fs.readFileSync(`${__dirname}/../data/dev-data/studentInfo.json`)
-);
+const APIFeautres = require('./../utils/apifeatures');
+const students = require('./../Models/studentModel');
+const catchAsync = require('./../utils/catchAsync');
 
-exports.quickcheck = (req, res, next, val) => {
-  console.log(`The Id is ${val}`);
-  const id = req.params.id * 1;
-  if (id > students.length) {
-    return res.status(404).json({
-      status: 'failed to load',
-      message: 'Failed to load the requested ID',
+exports.getAllStudentsDetail = async (req, res) => {
+  try {
+    const features = new APIFeautres(students.find(), req.query)
+      .filter()
+      .sort()
+      .limitfields()
+      .pagination();
+    const allStudents = await features.query;
+    res.status(200).json({
+      status: 'Success',
+      result: allStudents.length,
+      data: { allStudents },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'Failure',
+      message: err,
     });
   }
-  next();
 };
 
-exports.getAllStudentsDetail = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    requestedAT: req.requesttime,
-    results: students.length,
+exports.createStudentDetail = catchAsync(async (req, res) => {
+  const newStudent = await students.create(req.body);
+  res.status(201).json({
+    status: 'Success',
     data: {
-      students,
+      Students: newStudent,
     },
   });
-};
+});
 
-exports.createStudentDetail = (req, res) => {
-  console.log(req.body);
-  const newId = students[students.length - 1].id + 1;
-  const newStudent = Object.assign({ id: newId }, req.body);
-  students.push(newStudent);
-  fs.writeFile(
-    `${__dirname}/data/dev-data/studentInfo.json`,
-    JSON.stringify(students),
-    (err) => {
-      res.status(201).json({
-        status: 'success',
-        data: {
-          students: newStudent,
-        },
-      });
-    }
-  );
-};
-
-exports.getStudentDetail = (req, res) => {
-  const id = req.params.id * 1;
-  console.log(req.params);
-  if (id > students.length) {
-    res.status(404).json({
-      status: 'failure',
-      message: 'Invalid Response',
-    });
-  }
-
-  const student = students.find((el) => el.id == id);
+exports.getStudentDetail = catchAsync(async (req, res) => {
+  const Student = await students.findById(req.params.id);
   res.status(200).json({
-    status: 'success',
+    status: 'Success',
+    data: { Student },
+  });
+});
+
+exports.updateStudentDetail = catchAsync(async (req, res) => {
+  const student = await students.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(200).json({
+    status: 'Success',
     data: {
       student,
     },
   });
-};
+});
 
-exports.updateStudentDetail = (req, res) => {
-  const id = req.params.id * 1;
-  if (id > students.length) {
-    return res.status(404).json({
-      status: 'failed to load',
-      message: 'Failed to load the requested ID',
-    });
-  }
-  res.status(200).json({
-    status: 'Success',
-    data: {
-      tour: '<updated text will be here>',
-    },
-  });
-};
-
-exports.deleteStudentDetail = (req, res) => {
-  const id = req.params.id * 1;
-  if (id > students.length) {
-    return res.status(404).json({
-      status: 'failed to load',
-      message: 'Failed to load the requested ID',
-    });
-  }
+exports.deleteStudentDetail = catchAsync(async (req, res) => {
+  await students.findByIdAndDelete(req.params.id);
   res.status(204).json({
     status: 'Success',
     data: null,
   });
-};
+});
