@@ -1,0 +1,35 @@
+[
+  {
+    "id": 0,
+    "studentName": "Akilan Selvam",
+    "studentAge": "23",
+    "gender": "Male",
+    "city": "Pondicherry",
+    "course": "Computer Science and Engineering",
+    "duration": "4 Years",
+    "collegeName": "ABC Engineering College",
+    "emailId": "selvamakilan01@gmail.com"
+  },
+  {
+    "id": 1,
+    "studentName": "Surekha Akilan",
+    "studentAge": "20",
+    "gender": "Female",
+    "city": "Cuddalore",
+    "course": "B.Com",
+    "duration": "3 Years",
+    "collegeName": "ABC Arts and Science College",
+    "emailId": "surekhaakilan@gmail.com"
+  },
+  {
+    "id": 2,
+    "studentName": "Batman",
+    "studentAge": "40",
+    "gender": "Male",
+    "city": "Gotham",
+    "course": "Law and Order",
+    "duration": "10 years",
+    "collegeName": "ABC Law and Order College",
+    "emailId": "BatmanGotham@gmail.com"
+  }
+]
