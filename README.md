@@ -1,5 +1,6 @@
 # Student-Info-Management
 This is a Management System for Students Detail
+![portfolioImge4](https://user-images.githubusercontent.com/54879150/176769292-e31a7942-3b95-49ee-8d4e-0fdf728e1710.jpg)
 
 POST
 http://localhost:8000/api/v1/student/
